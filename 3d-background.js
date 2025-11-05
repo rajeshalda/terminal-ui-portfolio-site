@@ -19,9 +19,20 @@
     const MOUSE_INFLUENCE = 50;
 
     function init() {
+        // Check if THREE.js is loaded
+        if (typeof THREE === 'undefined') {
+            console.error('THREE.js not loaded! Cannot initialize 3D background.');
+            return;
+        }
+
         // Get canvas
         const canvas = document.getElementById('three-canvas');
-        if (!canvas) return;
+        if (!canvas) {
+            console.error('Canvas element not found!');
+            return;
+        }
+
+        console.log('Initializing 3D background...');
 
         // Create scene
         scene = new THREE.Scene();
@@ -63,6 +74,8 @@
 
         // Start animation
         animate();
+
+        console.log('3D background initialized successfully! Particles:', PARTICLE_COUNT);
     }
 
     function createParticles() {
@@ -285,11 +298,20 @@
     // Expose update function for theme changes
     window.update3DBackground = updateParticleColors;
 
-    // Initialize when DOM is ready
+    // Initialize when both DOM and THREE.js are ready
+    function tryInit() {
+        if (typeof THREE !== 'undefined') {
+            init();
+        } else {
+            console.log('Waiting for THREE.js to load...');
+            setTimeout(tryInit, 100);
+        }
+    }
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', tryInit);
     } else {
-        init();
+        tryInit();
     }
 
 })();
