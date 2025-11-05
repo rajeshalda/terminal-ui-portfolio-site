@@ -362,12 +362,129 @@ terminalInput.addEventListener('keydown', (e) => {
 });
 
 // Keep input focused
-document.addEventListener('click', () => {
-    terminalInput.focus();
+document.addEventListener('click', (e) => {
+    // Only focus if not dragging
+    if (!isDragging) {
+        terminalInput.focus();
+    }
 });
 
 // Initialize
 terminalInput.focus();
+
+// Draggable Terminal Functionality
+const terminalContainer = document.querySelector('.terminal-container');
+const terminalHeader = document.querySelector('.terminal-header');
+
+let isDragging = false;
+let currentX;
+let currentY;
+let initialX;
+let initialY;
+let xOffset = 0;
+let yOffset = 0;
+
+// Check if device is mobile
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+// Set initial position
+function setInitialPosition() {
+    if (!isMobile()) {
+        terminalContainer.style.transform = 'translate(-50%, -50%)';
+        xOffset = 0;
+        yOffset = 0;
+    }
+}
+
+// Drag start
+function dragStart(e) {
+    if (isMobile()) return; // Disable dragging on mobile
+
+    if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - xOffset;
+        initialY = e.touches[0].clientY - yOffset;
+    } else {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+    }
+
+    if (e.target === terminalHeader || terminalHeader.contains(e.target)) {
+        isDragging = true;
+        terminalContainer.classList.add('dragging');
+    }
+}
+
+// Drag
+function drag(e) {
+    if (isDragging && !isMobile()) {
+        e.preventDefault();
+
+        if (e.type === "touchmove") {
+            currentX = e.touches[0].clientX - initialX;
+            currentY = e.touches[0].clientY - initialY;
+        } else {
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+        }
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        // Get viewport dimensions
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const terminalWidth = terminalContainer.offsetWidth;
+        const terminalHeight = terminalContainer.offsetHeight;
+
+        // Calculate boundaries (keep at least 100px of the terminal visible)
+        const minX = -(viewportWidth / 2) + 100;
+        const maxX = (viewportWidth / 2) - 100;
+        const minY = -(viewportHeight / 2) + 50;
+        const maxY = (viewportHeight / 2) - 50;
+
+        // Apply boundaries
+        const boundedX = Math.max(minX, Math.min(maxX, currentX));
+        const boundedY = Math.max(minY, Math.min(maxY, currentY));
+
+        setTranslate(boundedX, boundedY, terminalContainer);
+    }
+}
+
+// Drag end
+function dragEnd(e) {
+    initialX = currentX;
+    initialY = currentY;
+    isDragging = false;
+    terminalContainer.classList.remove('dragging');
+}
+
+// Set position
+function setTranslate(xPos, yPos, el) {
+    el.style.transform = `translate(calc(-50% + ${xPos}px), calc(-50% + ${yPos}px))`;
+}
+
+// Event listeners for desktop
+terminalHeader.addEventListener('mousedown', dragStart);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', dragEnd);
+
+// Event listeners for touch devices
+terminalHeader.addEventListener('touchstart', dragStart, { passive: false });
+document.addEventListener('touchmove', drag, { passive: false });
+document.addEventListener('touchend', dragEnd);
+
+// Reset position on window resize
+window.addEventListener('resize', () => {
+    if (isMobile()) {
+        terminalContainer.style.transform = 'none';
+        xOffset = 0;
+        yOffset = 0;
+    } else {
+        setInitialPosition();
+    }
+});
 
 // Easter egg commands
 commands.ls = {
