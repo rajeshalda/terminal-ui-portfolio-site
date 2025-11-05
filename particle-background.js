@@ -11,8 +11,10 @@
 
     const ctx = canvas.getContext('2d');
     let particles = [];
-    let mouseX = 0;
-    let mouseY = 0;
+    let mouseX = -9999; // Start off-screen
+    let mouseY = -9999;
+    let targetMouseX = -9999;
+    let targetMouseY = -9999;
     let width = window.innerWidth;
     let height = window.innerHeight;
 
@@ -20,7 +22,8 @@
     const PARTICLE_COUNT = 150;
     const PARTICLE_SIZE = 2;
     const MAX_DISTANCE = 150;
-    const MOUSE_RADIUS = 200;
+    const MOUSE_RADIUS = 250; // Increased for more noticeable effect
+    const MOUSE_FORCE = 1.2; // Increased force strength
 
     // Set canvas size
     canvas.width = width;
@@ -41,16 +44,24 @@
             this.x += this.vx;
             this.y += this.vy;
 
-            // Mouse interaction - attract to mouse
+            // Mouse interaction - attract to mouse with stronger force
             const dx = mouseX - this.x;
             const dy = mouseY - this.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < MOUSE_RADIUS) {
-                const force = (1 - distance / MOUSE_RADIUS) * 0.3;
-                this.x += dx * force * 0.01;
-                this.y += dy * force * 0.01;
+            if (distance < MOUSE_RADIUS && distance > 0) {
+                const force = (1 - distance / MOUSE_RADIUS) * MOUSE_FORCE;
+                this.vx += dx * force * 0.002;
+                this.vy += dy * force * 0.002;
+
+                // Apply direct position change for immediate feedback
+                this.x += dx * force * 0.015;
+                this.y += dy * force * 0.015;
             }
+
+            // Apply friction to velocity
+            this.vx *= 0.98;
+            this.vy *= 0.98;
 
             // Wrap around edges
             if (this.x < 0) this.x = width;
@@ -121,12 +132,33 @@
 
     // Animation loop
     function animate() {
+        // Smooth mouse interpolation
+        mouseX += (targetMouseX - mouseX) * 0.1;
+        mouseY += (targetMouseY - mouseY) * 0.1;
+
         // Clear canvas with fade effect
         ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
         ctx.fillRect(0, 0, width, height);
 
         // Reset shadow
         ctx.shadowBlur = 0;
+
+        // Draw mouse interaction area (visual feedback)
+        if (targetMouseX > 0 && targetMouseY > 0) {
+            const color = getParticleColor();
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, MOUSE_RADIUS, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(color, 0.1);
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw smaller inner circle
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, MOUSE_RADIUS / 2, 0, Math.PI * 2);
+            ctx.strokeStyle = hexToRgba(color, 0.15);
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
 
         // Draw connections first (behind particles)
         drawConnections();
@@ -142,8 +174,8 @@
 
     // Mouse move handler
     function handleMouseMove(event) {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        targetMouseX = event.clientX;
+        targetMouseY = event.clientY;
     }
 
     // Window resize handler
@@ -166,10 +198,22 @@
     // Expose update function for theme changes
     window.update3DBackground = updateColors;
 
+    // Debug: Log first mouse movement
+    let firstMouseMove = true;
+    document.addEventListener('mousemove', function logFirstMove(e) {
+        if (firstMouseMove) {
+            console.log('✅ Mouse interaction active! Move your cursor to attract particles.');
+            console.log(`Mouse position: ${e.clientX}, ${e.clientY}`);
+            firstMouseMove = false;
+            document.removeEventListener('mousemove', logFirstMove);
+        }
+    });
+
     // Initialize and start
     init();
     animate();
 
     console.log('🌟 Particle background fully loaded and animating!');
+    console.log(`📍 Interaction radius: ${MOUSE_RADIUS}px`);
 
 })();
