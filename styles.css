@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.terminal-container {
+    width: 100%;
+    max-width: 900px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.terminal-header {
+    background: #2d2d2d;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #3d3d3d;
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.btn-close {
+    background: #ff5f56;
+}
+
+.btn-minimize {
+    background: #ffbd2e;
+}
+
+.btn-maximize {
+    background: #27c93f;
+}
+
+.terminal-title {
+    color: #999;
+    font-size: 13px;
+    flex: 1;
+    text-align: center;
+}
+
+.terminal-body {
+    padding: 20px;
+    background: #0c0c0c;
+    min-height: 500px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#terminal-output {
+    color: #00ff00;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.terminal-welcome {
+    margin-bottom: 20px;
+}
+
+.ascii-art {
+    color: #00ff00;
+    font-size: 10px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.terminal-welcome p {
+    margin: 5px 0;
+}
+
+.highlight {
+    color: #00ffff;
+    font-weight: bold;
+}
+
+.command-line {
+    margin: 8px 0;
+}
+
+.prompt {
+    color: #00ff00;
+    margin-right: 8px;
+}
+
+.user-input {
+    color: #fff;
+}
+
+.output {
+    color: #00ff00;
+    margin-left: 0;
+    white-space: pre-wrap;
+}
+
+.output.error {
+    color: #ff5555;
+}
+
+.output a {
+    color: #00ffff;
+    text-decoration: none;
+}
+
+.output a:hover {
+    text-decoration: underline;
+}
+
+.output ul {
+    margin-left: 20px;
+    list-style-type: none;
+}
+
+.output ul li:before {
+    content: "▸ ";
+    color: #00ff00;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    caret-color: #00ff00;
+}
+
+/* Scrollbar styling */
+.terminal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
+}
+
+/* Cursor blink effect */
+@keyframes blink {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+#terminal-input::after {
+    content: '▋';
+    animation: blink 1s infinite;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .terminal-container {
+        border-radius: 0;
+    }
+
+    .terminal-body {
+        font-size: 12px;
+        padding: 15px;
+    }
+
+    .ascii-art {
+        font-size: 8px;
+    }
+}
