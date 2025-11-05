@@ -23,6 +23,11 @@ function changeTheme(themeName) {
 
     // Save to localStorage
     localStorage.setItem('terminalTheme', themeName);
+
+    // Update 3D background particle colors if available
+    if (typeof window.update3DBackground === 'function') {
+        setTimeout(() => window.update3DBackground(), 100);
+    }
 }
 
 function loadSavedTheme() {
