@@ -108,11 +108,12 @@ const commands = {
         usage: "help",
         execute: () => {
             return `
-<span class="highlight">Available Commands:</span>
+<span class="highlight">📚 Available Commands (40+ total)</span>
 
-<span class="highlight">Portfolio:</span>
+<span class="highlight">📋 Portfolio:</span>
   about          - Learn more about me
   skills         - View my technical skills
+  skillchart     - Visual skills proficiency chart
   experience     - View my work experience
   projects       - View my projects
   education      - View my education background
@@ -122,32 +123,60 @@ const commands = {
   social         - View my social media links
   resume         - Download my resume
 
-<span class="highlight">Interactive:</span>
+<span class="highlight">🌐 Live Data:</span>
   github [user]  - Show GitHub stats (default: rajeshalda)
-  stats          - Show visitor statistics
-  theme [name]   - Change color theme (green|blue|amber|purple|red)
+  weather [city] - Current weather (default: Ranchi)
+  crypto         - Cryptocurrency prices (BTC, ETH, ADA, SOL, DOT)
+  neofetch       - System information display
+
+<span class="highlight">🎮 Games:</span>
   snake          - Play Snake game
   tictactoe      - Play Tic-Tac-Toe against AI
+  2048           - Play 2048 puzzle game
+  typing         - Test your typing speed
+  quiz           - Tech knowledge quiz
 
-<span class="highlight">File System:</span>
+<span class="highlight">🎨 Customization:</span>
+  theme [name]   - Change color theme
+  themes         - List all 15 themes
+  sound [on|off] - Toggle sound effects
+  crt            - Toggle CRT/scanline effects
+
+<span class="highlight">📁 File System:</span>
   ls [path]      - List directory contents
   cd [path]      - Change directory
   pwd            - Print working directory
   cat [file]     - Display file contents
   tree           - Display directory tree
 
-<span class="highlight">Easter Eggs:</span>
-  matrix         - Enter the Matrix
-  joke           - Tell a random programming joke
-  quote          - Show an inspirational tech quote
+<span class="highlight">🎭 Fun & Easter Eggs:</span>
+  matrix         - Matrix rain animation
+  glitch         - Trigger glitch effect
+  joke           - Random programming joke
+  quote          - Inspirational tech quote
+  fortune        - Fortune cookie message
+  cowsay [msg]   - Make a cow say something
+  figlet [text]  - ASCII text art
+
+<span class="highlight">📊 Social:</span>
+  guestbook      - View/sign guestbook
+  stats          - Visitor statistics
+  qr [text]      - Generate QR code
+
+<span class="highlight">⚙️ System:</span>
+  clear          - Clear the terminal
+  banner         - Display the welcome banner
+  help           - Display this help message
   whoami         - Display current user
   date           - Display current date
   echo [text]    - Display a line of text
 
-<span class="highlight">System:</span>
-  clear          - Clear the terminal
-  banner         - Display the welcome banner
-  help           - Display this help message
+<span class="highlight">💡 Pro Tips:</span>
+  • Use Tab for autocomplete
+  • Use ↑/↓ arrows for command history
+  • Try 'theme cyberpunk' for neon colors!
+  • Type 'sound on' for audio feedback
+  • Type 'crt' for retro CRT effects
 
 Type any command to get started!
             `;
@@ -375,6 +404,42 @@ async function processCommand(input) {
     const trimmedInput = input.trim();
     const [command, ...args] = trimmedInput.toLowerCase().split(' ');
 
+    // Play sound effect
+    if (window.soundSystem && window.soundSystem.enabled) {
+        window.soundSystem.playKeyPress();
+    }
+
+    // Handle typing test input
+    if (window.typingTest && !window.typingTest.endTime) {
+        addOutput(`<span class="prompt">visitor@portfolio:~$</span> <span class="user-input">${input}</span>`);
+        for (let char of trimmedInput) {
+            const output = window.typingTest.handleInput(char);
+            // Update last output
+            const outputs = terminalOutput.querySelectorAll('.output');
+            if (outputs.length > 0) {
+                outputs[outputs.length - 1].innerHTML = output;
+            } else {
+                addOutput(output, 'output');
+            }
+        }
+        return;
+    }
+
+    // Handle quiz input
+    if (window.techQuiz && /^[1-4]$/.test(command)) {
+        addOutput(`<span class="prompt">visitor@portfolio:~$</span> <span class="user-input">${input}</span>`);
+        const result = window.techQuiz.answer(command);
+        addOutput(result, 'output');
+        return;
+    }
+
+    if (window.techQuiz && command === 'next') {
+        addOutput(`<span class="prompt">visitor@portfolio:~$</span> <span class="user-input">${input}</span>`);
+        const result = window.techQuiz.next();
+        addOutput(result, 'output');
+        return;
+    }
+
     // Handle tic-tac-toe game input
     if (window.currentTicTacToeGame && !window.currentTicTacToeGame.gameOver && /^[1-9]$/.test(command)) {
         const position = parseInt(command) - 1;
@@ -415,11 +480,26 @@ async function processCommand(input) {
             if (resolvedResult !== null) {
                 addOutput(resolvedResult, 'output');
             }
+
+            // Play success sound
+            if (window.soundSystem && window.soundSystem.enabled) {
+                window.soundSystem.playSuccess();
+            }
         } else if (result !== null) {
             addOutput(result, 'output');
+
+            // Play success sound
+            if (window.soundSystem && window.soundSystem.enabled) {
+                window.soundSystem.playSuccess();
+            }
         }
     } else {
         addOutput(`Command not found: ${command}. Type <span class="highlight">'help'</span> to see available commands.`, 'output error');
+
+        // Play error sound
+        if (window.soundSystem && window.soundSystem.enabled) {
+            window.soundSystem.playError();
+        }
     }
 }
 
@@ -598,24 +678,32 @@ window.addEventListener('resize', () => {
 
 commands.theme = {
     description: "Change terminal color theme",
-    usage: "theme [green|blue|amber|purple|red]",
+    usage: "theme [name]",
     execute: (args) => {
         if (!args || args.length === 0) {
-            let output = `<span class="highlight">Available Themes:</span>\n\n`;
+            let output = `<span class="highlight">Available Themes (5 Basic):</span>\n\n`;
             for (const [key, name] of Object.entries(window.terminalFeatures.themes)) {
                 output += `  ${key.padEnd(10)} - ${name}\n`;
             }
-            output += `\nUsage: theme [name]`;
+            output += `\nType 'themes' to see all 15 themes!\nUsage: theme [name]`;
             return output;
         }
 
         const theme = args[0].toLowerCase();
+
+        // Try extended themes first
+        if (window.moreFeatures && window.moreFeatures.extendedThemes[theme]) {
+            window.moreFeatures.applyExtendedTheme(theme);
+            return `Theme changed to <span class="highlight">${window.moreFeatures.extendedThemes[theme].name}</span>! ✨`;
+        }
+
+        // Fall back to basic themes
         if (window.terminalFeatures.themes[theme]) {
             window.terminalFeatures.changeTheme(theme);
             return `Theme changed to <span class="highlight">${window.terminalFeatures.themes[theme]}</span>!`;
-        } else {
-            return `<span class="output error">Theme '${theme}' not found. Type 'theme' to see available themes.</span>`;
         }
+
+        return `<span class="output error">Theme '${theme}' not found. Type 'themes' to see all themes.</span>`;
     }
 };
 
@@ -869,6 +957,197 @@ commands.echo = {
 };
 
 // ============================================
+// ADVANCED COMMANDS - BATCH 2
+// ============================================
+
+commands.neofetch = {
+    description: "Display system information",
+    usage: "neofetch",
+    execute: () => {
+        return window.advancedFeatures.generateNeofetch();
+    }
+};
+
+commands.weather = {
+    description: "Show current weather",
+    usage: "weather [city]",
+    execute: async (args) => {
+        const city = args[0] || 'Ranchi';
+        const weather = await window.advancedFeatures.fetchWeather(city);
+        return window.advancedFeatures.formatWeather(weather);
+    }
+};
+
+commands.crypto = {
+    description: "Show cryptocurrency prices",
+    usage: "crypto",
+    execute: async () => {
+        const data = await window.advancedFeatures.fetchCryptoPrices();
+        return window.advancedFeatures.formatCrypto(data);
+    }
+};
+
+commands.sound = {
+    description: "Toggle sound effects",
+    usage: "sound [on|off]",
+    execute: (args) => {
+        if (!window.soundSystem) {
+            window.soundSystem = new window.advancedFeatures.SoundSystem();
+        }
+
+        if (args[0] === 'on') {
+            window.soundSystem.enabled = true;
+            localStorage.setItem('soundEnabled', 'true');
+            window.soundSystem.playSuccess();
+            return '<span class="highlight">Sound effects enabled! 🔊</span>';
+        } else if (args[0] === 'off') {
+            window.soundSystem.enabled = false;
+            localStorage.setItem('soundEnabled', 'false');
+            return '<span class="highlight">Sound effects disabled 🔇</span>';
+        } else {
+            const status = window.soundSystem.toggle();
+            if (status) window.soundSystem.playSuccess();
+            return `<span class="highlight">Sound effects ${status ? 'enabled 🔊' : 'disabled 🔇'}</span>`;
+        }
+    }
+};
+
+commands.skillchart = {
+    description: "Display skills as visual chart",
+    usage: "skillchart",
+    execute: () => {
+        return window.advancedFeatures.generateSkillsChart();
+    }
+};
+
+commands.qr = {
+    description: "Generate QR code for portfolio",
+    usage: "qr [text]",
+    execute: (args) => {
+        const text = args.length > 0 ? args.join(' ') : window.location.href;
+        return window.advancedFeatures.generateQRCode(text);
+    }
+};
+
+commands.guestbook = {
+    description: "Sign or view the guestbook",
+    usage: "guestbook [view|sign \"name\" \"message\"]",
+    execute: (args) => {
+        if (!window.guestBook) {
+            window.guestBook = new window.advancedFeatures.GuestBook();
+        }
+
+        if (!args || args.length === 0 || args[0] === 'view') {
+            return window.guestBook.render();
+        }
+
+        if (args[0] === 'sign' && args.length >= 3) {
+            const name = args[1];
+            const message = args.slice(2).join(' ');
+            window.guestBook.addEntry(name, message);
+            if (window.soundSystem) window.soundSystem.playSuccess();
+            return `<span class="highlight">✓ Thank you for signing the guestbook!</span>\n\nType 'guestbook' to view all entries.`;
+        }
+
+        return `Usage: guestbook view\n       guestbook sign "Your Name" "Your Message"`;
+    }
+};
+
+commands['2048'] = {
+    description: "Play 2048 game",
+    usage: "2048",
+    execute: () => {
+        const gameContainer = document.createElement('div');
+        gameContainer.className = 'output';
+        terminalOutput.appendChild(gameContainer);
+
+        window.current2048Game = new window.advancedFeatures.Game2048(gameContainer);
+        return null;
+    }
+};
+
+commands.typing = {
+    description: "Test your typing speed",
+    usage: "typing",
+    execute: () => {
+        window.typingTest = new window.moreFeatures.TypingTest();
+        return window.typingTest.start();
+    }
+};
+
+commands.cowsay = {
+    description: "Make a cow say something",
+    usage: "cowsay [message]",
+    execute: (args) => {
+        const message = args.length > 0 ? args.join(' ') : "Moo! Welcome to Rajesh's portfolio!";
+        return window.moreFeatures.cowsay(message);
+    }
+};
+
+commands.figlet = {
+    description: "Create ASCII text art",
+    usage: "figlet [text]",
+    execute: (args) => {
+        const text = args.length > 0 ? args.join(' ') : "HELLO";
+        return window.moreFeatures.figlet(text);
+    }
+};
+
+commands.fortune = {
+    description: "Get a random fortune cookie",
+    usage: "fortune",
+    execute: () => {
+        return '<pre class="highlight">' + window.moreFeatures.getFortune() + '</pre>';
+    }
+};
+
+commands.quiz = {
+    description: "Play tech knowledge quiz",
+    usage: "quiz",
+    execute: () => {
+        window.techQuiz = new window.moreFeatures.TechQuiz();
+        return window.techQuiz.start();
+    }
+};
+
+commands.crt = {
+    description: "Toggle CRT/scanline effects",
+    usage: "crt",
+    execute: () => {
+        const enabled = window.moreFeatures.toggleCRTEffect();
+        return `<span class="highlight">CRT effects ${enabled ? 'enabled' : 'disabled'}!</span>`;
+    }
+};
+
+commands.glitch = {
+    description: "Trigger glitch effect",
+    usage: "glitch",
+    execute: () => {
+        window.moreFeatures.glitchEffect();
+        return '<span class="highlight">*GLITCH*</span>';
+    }
+};
+
+commands.themes = {
+    description: "List all available themes",
+    usage: "themes",
+    execute: () => {
+        let output = '<span class="highlight">Available Themes (15 total):</span>\n\n';
+
+        const themes = window.moreFeatures.extendedThemes;
+        let count = 0;
+
+        for (const [key, theme] of Object.entries(themes)) {
+            output += `  ${key.padEnd(12)} - ${theme.name}\n`;
+            count++;
+        }
+
+        output += `\nUsage: theme [name]\nExample: theme cyberpunk`;
+        return output;
+    }
+};
+
+// ============================================
 // INITIALIZATION
 // ============================================
 
@@ -881,8 +1160,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const visits = window.terminalFeatures.initVisitorCounter();
     console.log(`Welcome! Visit #${visits}`);
 
+    // Initialize sound system
+    if (localStorage.getItem('soundEnabled') === 'true') {
+        window.soundSystem = new window.advancedFeatures.SoundSystem();
+        window.soundSystem.enabled = true;
+    }
+
+    // Load CRT effect if enabled
+    if (localStorage.getItem('crtEffect') === 'enabled') {
+        window.moreFeatures.enableCRTEffect();
+    }
+
     // Update prompt with current directory
     updatePrompt();
+
+    // Show welcome tip
+    setTimeout(() => {
+        console.log('%c💡 Pro Tip: Type "help" to see all 40+ commands!', 'color: #00ff00; font-size: 14px; font-weight: bold;');
+        console.log('%c🎨 Try: theme cyberpunk | sound on | crt | neofetch', 'color: #00ffff; font-size: 12px;');
+    }, 1000);
 });
 
 // Update terminal prompt
