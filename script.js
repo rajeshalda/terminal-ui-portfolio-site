@@ -7,79 +7,97 @@ let historyIndex = -1;
 
 // Portfolio Data - Customize this section with your information
 const portfolioData = {
-    name: "Your Name",
-    title: "Full Stack Developer",
-    email: "your.email@example.com",
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
-    website: "https://yourwebsite.com",
+    name: "Rajesh Alda",
+    title: "Associate Software Engineer",
+    email: "rajeshalda844@gmail.com",
+    phone: "+91-8292701044",
+    location: "Ranchi, Jharkhand",
+    github: "https://github.com/rajeshalda",
+    linkedin: "https://linkedin.com/in/rajeshalda",
+    website: "https://rajeshalda.vercel.app",
 
-    about: `I'm a passionate developer with experience in building web applications.
-I love creating innovative solutions and learning new technologies.
-Always excited to take on new challenges and collaborate on interesting projects.`,
+    about: `I am an IT professional with experience in software training and customer care. I hold certifications
+in Microsoft Azure Fundamentals (AZ-900) and CCNA. With a Master's degree in Computer Applications
+(MCA) and a Bachelor's degree in Computer Applications (BCA), I have a strong foundation in networking,
+cloud computing, and SAP MM. I am skilled in Microsoft Azure, various networking protocols, and SAP MM's
+procurement and inventory management processes. I am also passionate about cooking, gaming, and
+exploring new technologies.`,
 
     skills: [
-        "Languages: JavaScript, Python, Java, TypeScript",
-        "Frontend: React, Vue.js, HTML5, CSS3, Tailwind CSS",
-        "Backend: Node.js, Express, Django, Flask",
-        "Database: MongoDB, PostgreSQL, MySQL, Redis",
-        "Tools: Git, Docker, AWS, Linux, CI/CD",
-        "Other: REST APIs, GraphQL, Microservices, Agile"
+        "Cloud Computing: Microsoft Azure (VM, Active Directory, Disaster Recovery, Network Services, Security)",
+        "Networking: OSI & TCP/IP Models, TCP/UDP, ARP, ICMP, Static & Dynamic Routing (RIP, EIGRP, OSPF)",
+        "Switching: STP, VLANs, CDP, LLDP, DTP, LACP, PAGP, Inter-VLAN Routing",
+        "Network Services: ACLs, NAT/PAT, DHCP, DNS",
+        "SAP MM: Master Data, Purchase Info, P2P Process, Inventory, Contract Management, MIRO, Invoice Parking",
+        "Certifications: Microsoft Azure Fundamentals (AZ-900), CCNA",
+        "Languages: English (Professional), Hindi (Native)"
     ],
 
     experience: [
         {
-            role: "Senior Full Stack Developer",
-            company: "Tech Company Inc.",
-            period: "2022 - Present",
-            description: "Leading development of scalable web applications using React and Node.js"
+            role: "Associate Software Engineer",
+            company: "Nathcorp Pvt. Ltd.",
+            period: "Jun 2024 - Present",
+            description: "Working on software engineering projects, applying knowledge of networking, cloud computing, and enterprise systems"
         },
         {
-            role: "Full Stack Developer",
-            company: "Startup Co.",
-            period: "2020 - 2022",
-            description: "Built and maintained multiple web applications and REST APIs"
+            role: "SAP MM Module Training",
+            company: "Techning IT Solutions Pvt. LTD",
+            period: "Jun 2023 - Jun 2024",
+            description: "Completed comprehensive training in SAP MM Module including Master Data Management, Procure-to-Pay processes, Inventory Management, and Invoice Verification"
         },
         {
-            role: "Junior Developer",
-            company: "Digital Agency",
-            period: "2018 - 2020",
-            description: "Developed responsive websites and learned modern web development"
+            role: "Software Trainee",
+            company: "Nathcorp Pvt. Ltd.",
+            period: "Dec 2022 - May 2023",
+            description: "Gained hands-on experience in software development practices and enterprise solutions"
         }
     ],
 
     projects: [
         {
-            name: "E-Commerce Platform",
-            tech: "React, Node.js, MongoDB, Stripe",
-            description: "Full-featured e-commerce platform with payment integration",
-            link: "https://github.com/yourusername/project1"
+            name: "Azure Cloud Infrastructure Setup",
+            tech: "Microsoft Azure, Virtual Machines, Active Directory",
+            description: "Designed and deployed cloud infrastructure using Azure services including VMs, AD, and disaster recovery solutions",
+            link: "https://github.com/rajeshalda/azure-infrastructure"
         },
         {
-            name: "Task Management App",
-            tech: "Vue.js, Firebase, Vuex",
-            description: "Real-time collaborative task management application",
-            link: "https://github.com/yourusername/project2"
+            name: "Network Design & Implementation",
+            tech: "CCNA, Routing Protocols, VLANs, Network Services",
+            description: "Implemented enterprise network solutions with dynamic routing (OSPF, EIGRP), VLANs, and network security features",
+            link: "https://github.com/rajeshalda/network-design"
         },
         {
-            name: "Weather Dashboard",
-            tech: "React, API Integration, Chart.js",
-            description: "Weather forecasting dashboard with data visualization",
-            link: "https://github.com/yourusername/project3"
+            name: "SAP MM Procurement Workflows",
+            tech: "SAP MM, P2P Process, Inventory Management",
+            description: "Developed and optimized procurement workflows including purchase orders, invoice verification, and inventory management",
+            link: "https://github.com/rajeshalda/sap-mm-workflows"
         }
     ],
 
     education: [
-        "B.S. Computer Science - University Name (2018)",
-        "AWS Certified Developer - Associate",
-        "MongoDB Certified Developer"
+        "Master of Computer Applications (MCA) - St. Xavier College, Ranchi University (2017-2020) - 65.33%",
+        "Bachelor of Computer Applications (BCA) - NSHM College of Management & Technology, MAKAUT (2013-2016) - 66.7%",
+        "Senior Secondary - Kolhan Inter College, Ranchi University (2010-2013) - 60%",
+        "Secondary School - Netaji Subhas Public School, CBSE (2009-2010) - 55%"
+    ],
+
+    certifications: [
+        "AZ-900: Microsoft Azure Fundamentals",
+        "CCNA (Cisco Certified Network Associate)"
+    ],
+
+    hobbies: [
+        "Cooking: Specializes in Chicken Curry",
+        "Gaming: Enjoys simulation games like Mud Runner and Euro Truck Simulation 2",
+        "Technology: Constantly exploring emerging tech trends and innovations"
     ],
 
     social: {
-        github: "https://github.com/yourusername",
-        linkedin: "https://linkedin.com/in/yourusername",
-        twitter: "https://twitter.com/yourusername",
-        email: "your.email@example.com"
+        github: "https://github.com/rajeshalda",
+        linkedin: "https://linkedin.com/in/rajeshalda",
+        twitter: "https://twitter.com/rajeshalda",
+        email: "rajeshalda844@gmail.com"
     }
 };
 
@@ -92,17 +110,19 @@ const commands = {
             return `
 Available commands:
 
-  <span class="highlight">about</span>       - Learn more about me
-  <span class="highlight">skills</span>      - View my technical skills
-  <span class="highlight">experience</span>  - View my work experience
-  <span class="highlight">projects</span>    - View my projects
-  <span class="highlight">education</span>   - View my education and certifications
-  <span class="highlight">contact</span>     - Get my contact information
-  <span class="highlight">social</span>      - View my social media links
-  <span class="highlight">resume</span>      - Download my resume
-  <span class="highlight">clear</span>       - Clear the terminal
-  <span class="highlight">help</span>        - Display this help message
-  <span class="highlight">banner</span>      - Display the welcome banner
+  <span class="highlight">about</span>          - Learn more about me
+  <span class="highlight">skills</span>         - View my technical skills
+  <span class="highlight">experience</span>     - View my work experience
+  <span class="highlight">projects</span>       - View my projects
+  <span class="highlight">education</span>      - View my education background
+  <span class="highlight">certifications</span> - View my professional certifications
+  <span class="highlight">hobbies</span>        - View my hobbies and interests
+  <span class="highlight">contact</span>        - Get my contact information
+  <span class="highlight">social</span>         - View my social media links
+  <span class="highlight">resume</span>         - Download my resume
+  <span class="highlight">clear</span>          - Clear the terminal
+  <span class="highlight">help</span>           - Display this help message
+  <span class="highlight">banner</span>         - Display the welcome banner
 
 Type any command to get started!
             `;
@@ -119,6 +139,7 @@ Type any command to get started!
 
 Name: ${portfolioData.name}
 Role: ${portfolioData.title}
+Location: ${portfolioData.location}
 
 ${portfolioData.about}
             `;
@@ -187,16 +208,50 @@ ${exp.description}
     },
 
     education: {
-        description: "View my education and certifications",
+        description: "View my education background",
         usage: "education",
         execute: () => {
             let output = `
-<span class="highlight">Education & Certifications</span>
+<span class="highlight">Education</span>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 <ul>`;
             portfolioData.education.forEach(edu => {
                 output += `<li>${edu}</li>`;
+            });
+            output += `</ul>`;
+            return output;
+        }
+    },
+
+    certifications: {
+        description: "View my professional certifications",
+        usage: "certifications",
+        execute: () => {
+            let output = `
+<span class="highlight">Professional Certifications</span>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<ul>`;
+            portfolioData.certifications.forEach(cert => {
+                output += `<li>${cert}</li>`;
+            });
+            output += `</ul>`;
+            return output;
+        }
+    },
+
+    hobbies: {
+        description: "View my hobbies and interests",
+        usage: "hobbies",
+        execute: () => {
+            let output = `
+<span class="highlight">Hobbies & Interests</span>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<ul>`;
+            portfolioData.hobbies.forEach(hobby => {
+                output += `<li>${hobby}</li>`;
             });
             output += `</ul>`;
             return output;
@@ -211,7 +266,11 @@ ${exp.description}
 <span class="highlight">Contact Information</span>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Email: <a href="mailto:${portfolioData.social.email}">${portfolioData.social.email}</a>
+Name: ${portfolioData.name}
+Location: ${portfolioData.location}
+Phone: ${portfolioData.phone}
+Email: <a href="mailto:${portfolioData.email}">${portfolioData.email}</a>
+
 GitHub: <a href="${portfolioData.social.github}" target="_blank">${portfolioData.social.github}</a>
 LinkedIn: <a href="${portfolioData.social.linkedin}" target="_blank">${portfolioData.social.linkedin}</a>
 
